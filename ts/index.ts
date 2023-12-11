@@ -5,7 +5,7 @@ import { getRandomColorHex } from './getRandomColorHex.js';
 import { IBall } from './interfaces';
 
 // Get canvas
-const CANVAS_ELEMENT = document.querySelector('canvas');
+const CANVAS_ELEMENT = document.querySelector('canvas') as HTMLCanvasElement;
 const CTX = CANVAS_ELEMENT?.getContext('2d');
 
 // Set canvas sizes
@@ -90,6 +90,12 @@ function animateBall(ball: Ball) {
 	}
 }
 
+function clearCanvas() {
+    CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
+    balls.length = 0
+    ballCounterElement.innerHTML = String(0);
+}
+
 //! Click listener
 CANVAS_ELEMENT?.addEventListener('click', (e) => {
 	const { offsetX, offsetY } = e;
@@ -147,3 +153,6 @@ inputs.forEach((input) => {
 
 //! Set ball count
 const ballCounterElement = document.getElementById('ball-counter') as HTMLInputElement;
+
+const closeButton = document.getElementById('clear');
+closeButton?.addEventListener('click', clearCanvas);

@@ -63,6 +63,11 @@ function animateBall(ball) {
         ball.speedX < 0 && (ball.speedX = ball.speedX + ball.friction);
     }
 }
+function clearCanvas() {
+    CTX === null || CTX === void 0 ? void 0 : CTX.clearRect(0, 0, CANVAS_ELEMENT.width, CANVAS_ELEMENT.height);
+    balls.length = 0;
+    ballCounterElement.innerHTML = String(0);
+}
 //! Click listener
 CANVAS_ELEMENT === null || CANVAS_ELEMENT === void 0 ? void 0 : CANVAS_ELEMENT.addEventListener('click', (e) => {
     const { offsetX, offsetY } = e;
@@ -76,10 +81,7 @@ window.addEventListener('resize', () => {
     CANVAS_ELEMENT.width = innerWidth;
     CANVAS_ELEMENT.height = innerHeight;
 });
-let lastTime = 1;
-function init(currentTime) {
-    const deltaTime = currentTime - lastTime;
-    lastTime = currentTime;
+function init() {
     requestAnimationFrame(init);
     draw();
 }
@@ -115,3 +117,5 @@ inputs.forEach((input) => {
 });
 //! Set ball count
 const ballCounterElement = document.getElementById('ball-counter');
+const closeButton = document.getElementById('clear');
+closeButton === null || closeButton === void 0 ? void 0 : closeButton.addEventListener('click', clearCanvas);

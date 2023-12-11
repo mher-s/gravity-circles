@@ -10,3 +10,4 @@
     3. Gravity
     4. Friction
     5. Bounce
+    6. Clear

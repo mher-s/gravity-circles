@@ -72,3 +72,12 @@ body {
     font-family: 'Courier New', Courier, monospace;
     font-size: 24px;
 }
+
+.clear {
+    font-family: 'Courier New', Courier, monospace;
+	position: absolute;
+	top: 12px;
+	right: 12px;
+    cursor: pointer;
+    color: red;
+}
