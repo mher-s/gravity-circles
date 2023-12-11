@@ -89,6 +89,7 @@ function init() {
 requestAnimationFrame(init);
 //! Input changes
 const inputIds = ['radius', 'speed', 'gravity', 'friction', 'bounce', 'max-ball-count'];
+const defaultSettingsByOrder = [20, 6, 0.5, 0.1, 0.7, 15];
 const inputs = inputIds.map((id) => document.getElementById(id));
 function handleInputChange(e) {
     const target = e.target;
@@ -110,7 +111,7 @@ function handleInputChange(e) {
             BOUNCE = value;
             break;
         case 'max-ball-count':
-            value >= target.maxLength ? (MAX_BALL_COUNT = target.maxLength) : (MAX_BALL_COUNT = value);
+            MAX_BALL_COUNT = value;
             break;
         default:
             break;
@@ -121,5 +122,20 @@ inputs.forEach((input) => {
 });
 //! Set ball count
 const ballCounterElement = document.getElementById('ball-counter');
+//! Clear
 const closeButton = document.getElementById('clear');
 closeButton === null || closeButton === void 0 ? void 0 : closeButton.addEventListener('click', clearCanvas);
+//! Reset setting
+const resetSettingsElement = document.getElementById('reset');
+resetSettingsElement === null || resetSettingsElement === void 0 ? void 0 : resetSettingsElement.addEventListener('click', resetSettings);
+function resetSettings() {
+    RADIUS = 20;
+    SPEED_X = 6;
+    GRAVITY = 0.5;
+    FRICTION = 0.1;
+    BOUNCE = 0.7;
+    MAX_BALL_COUNT = 15;
+    inputs.forEach((field, index) => {
+        field.value = String(defaultSettingsByOrder[index]);
+    });
+}
