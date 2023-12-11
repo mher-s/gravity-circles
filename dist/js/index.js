@@ -15,6 +15,7 @@ let FRICTION = 0.1;
 let BOUNCE = 0.7;
 let MAX_BALL_COUNT = 15;
 const balls = [];
+//! Ball instance
 class Ball {
     constructor(x, y, radius, color, speedX, speedY, friction, gravity, bounce) {
         this.x = x;
@@ -28,6 +29,7 @@ class Ball {
         this.radius = radius;
     }
 }
+//! Drawing balls in array
 function draw() {
     CTX === null || CTX === void 0 ? void 0 : CTX.clearRect(0, 0, CANVAS_ELEMENT.width, CANVAS_ELEMENT.height);
     for (let ball of balls) {
@@ -35,6 +37,7 @@ function draw() {
         animateBall(ball);
     }
 }
+//! Drawing current ball
 function drawBall(ball) {
     CTX === null || CTX === void 0 ? void 0 : CTX.beginPath();
     CTX.shadowColor = ball.color; //! Bad property but cool :D
@@ -43,27 +46,33 @@ function drawBall(ball) {
     CTX === null || CTX === void 0 ? void 0 : CTX.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
     CTX === null || CTX === void 0 ? void 0 : CTX.fill();
 }
+//! Animate current ball
 function animateBall(ball) {
     ball.x += ball.speedX;
     ball.y += ball.speedY;
     ball.speedY += ball.gravity;
+    //? Change direction of ball in X
     if (ball.x + ball.radius > CANVAS_ELEMENT.width || ball.x - ball.radius < 0) {
         ball.speedX *= -1;
     }
+    //? Bounce when hit bottom the ball
     if (ball.y + ball.radius > CANVAS_ELEMENT.height) {
         ball.y = CANVAS_ELEMENT.height - ball.radius;
         ball.speedY *= -ball.bounce;
-        if (ball.speedY < 0 && ball.speedY > -2.1) {
+        //? Stop Y
+        if (ball.speedY < 0 && ball.speedY > -2) {
             ball.speedY = 0;
         }
-        if (Math.abs(ball.speedX) < 1.1) {
+        //? Stop X
+        if (Math.abs(ball.speedX) < 1) {
             ball.speedX = 0;
         }
-        //* Stop Ball step by step
+        //? Stop Ball step by step
         ball.speedX > 0 && (ball.speedX = ball.speedX - ball.friction);
         ball.speedX < 0 && (ball.speedX = ball.speedX + ball.friction);
     }
 }
+//! CLear Elements
 function clearCanvas() {
     CTX === null || CTX === void 0 ? void 0 : CTX.clearRect(0, 0, CANVAS_ELEMENT.width, CANVAS_ELEMENT.height);
     balls.length = 0;
@@ -82,6 +91,7 @@ window.addEventListener('resize', () => {
     CANVAS_ELEMENT.width = innerWidth;
     CANVAS_ELEMENT.height = innerHeight;
 });
+//! Init
 function init() {
     requestAnimationFrame(init);
     draw();

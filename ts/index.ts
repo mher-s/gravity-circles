@@ -20,9 +20,9 @@ let GRAVITY: number = 0.5;
 let FRICTION: number = 0.1;
 let BOUNCE: number = 0.7;
 let MAX_BALL_COUNT: number = 15;
-
 const balls: Ball[] = [];
 
+//! Ball instance
 class Ball implements IBall {
 	x: number;
 	y: number;
@@ -47,7 +47,8 @@ class Ball implements IBall {
 	}
 }
 
-function draw() {
+//! Drawing balls in array
+function draw(): void {
 	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
 	for (let ball of balls) {
 		drawBall(ball);
@@ -55,6 +56,7 @@ function draw() {
 	}
 }
 
+//! Drawing current ball
 function drawBall(ball: Ball) {
 	CTX?.beginPath();
 	CTX!.shadowColor = ball.color; //! Bad property but cool :D
@@ -64,34 +66,40 @@ function drawBall(ball: Ball) {
 	CTX?.fill();
 }
 
+//! Animate current ball
 function animateBall(ball: Ball) {
 	ball.x += ball.speedX;
 	ball.y += ball.speedY;
 	ball.speedY += ball.gravity;
 
+	//? Change direction of ball in X
 	if (ball.x + ball.radius > CANVAS_ELEMENT!.width || ball.x - ball.radius < 0) {
 		ball.speedX *= -1;
 	}
 
+	//? Bounce when hit bottom the ball
 	if (ball.y + ball.radius > CANVAS_ELEMENT!.height) {
 		ball.y = CANVAS_ELEMENT!.height - ball.radius;
 		ball.speedY *= -ball.bounce;
 
-		if (ball.speedY < 0 && ball.speedY > -2.1) {
+        //? Stop Y
+		if (ball.speedY < 0 && ball.speedY > -2) {
 			ball.speedY = 0;
 		}
 
-		if (Math.abs(ball.speedX) < 1.1) {
+        //? Stop X
+		if (Math.abs(ball.speedX) < 1) {
 			ball.speedX = 0;
 		}
 
-		//* Stop Ball step by step
+		//? Stop Ball step by step
 		ball.speedX > 0 && (ball.speedX = ball.speedX - ball.friction);
 		ball.speedX < 0 && (ball.speedX = ball.speedX + ball.friction);
 	}
 }
 
-function clearCanvas() {
+//! CLear Elements
+function clearCanvas():void {
 	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
 	balls.length = 0;
 	ballCounterElement.innerHTML = String(0);
@@ -113,6 +121,7 @@ window.addEventListener('resize', () => {
 	CANVAS_ELEMENT!.height = innerHeight;
 });
 
+//! Init
 function init() {
 	requestAnimationFrame(init);
 	draw();
