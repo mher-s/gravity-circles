@@ -12,3 +12,4 @@
     5. Bounce
     6. Clear
     7. Ball max count
+    8. Reset settings to default
