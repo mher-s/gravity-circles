@@ -11,3 +11,4 @@
     4. Friction
     5. Bounce
     6. Clear
+    7. Ball max count

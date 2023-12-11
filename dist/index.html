@@ -27,24 +27,25 @@
 				class="cross">
 				Close
 			</p>
-            <div class="clear" id="clear">Clear</div>
+			<div
+				class="clear"
+				id="clear">
+				Clear
+			</div>
 			<p class="input-label">Ball radius</p>
 			<input
-				
 				class="input-field"
 				type="number"
 				value="20"
 				id="radius" />
 			<p class="input-label">Speed</p>
 			<input
-				
 				class="input-field"
 				type="number"
 				value="6"
 				id="speed" />
 			<p class="input-label">GRAVITY</p>
 			<input
-				
 				class="input-field"
 				type="number"
 				value="0.5"
@@ -52,7 +53,6 @@
 				step="0.1" />
 			<p class="input-label">FRICTION</p>
 			<input
-				
 				class="input-field"
 				type="number"
 				value="1"
@@ -60,15 +60,28 @@
 				step="0.1" />
 			<p class="input-label">BOUNCE</p>
 			<input
-				
 				class="input-field"
 				type="number"
 				value="0.7"
 				id="bounce"
 				step="0.1" />
+			<p class="input-label">Max ball count</p>
+			<input
+				class="input-field"
+				type="number"
+				value="15"
+				id="max-ball-count"
+				step="1" 
+                maxLength="100"
+                />
 		</div>
 		<canvas></canvas>
-        <div class="count-balls-wrap" tabindex="-1" id="ball-counter">0</div>
+		<div
+			class="count-balls-wrap"
+			tabindex="-1"
+			id="ball-counter">
+			0
+		</div>
 	</body>
 	<script
 		type="module"

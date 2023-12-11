@@ -19,6 +19,7 @@ let SPEED_Y: number = SPEED_X / 2;
 let GRAVITY: number = 0.5;
 let FRICTION: number = 0.1;
 let BOUNCE: number = 0.7;
+let MAX_BALL_COUNT: number = 15;
 
 const balls: Ball[] = [];
 
@@ -91,16 +92,16 @@ function animateBall(ball: Ball) {
 }
 
 function clearCanvas() {
-    CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
-    balls.length = 0
-    ballCounterElement.innerHTML = String(0);
+	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
+	balls.length = 0;
+	ballCounterElement.innerHTML = String(0);
 }
 
 //! Click listener
 CANVAS_ELEMENT?.addEventListener('click', (e) => {
 	const { offsetX, offsetY } = e;
 
-	if (balls.length < 15) {
+	if (balls.length < MAX_BALL_COUNT) {
 		ballCounterElement.innerHTML = String(balls.length + 1);
 		balls.push(new Ball(offsetX, offsetY, RADIUS, getRandomColorHex(), SPEED_X, SPEED_Y, FRICTION, GRAVITY, BOUNCE));
 	}
@@ -120,12 +121,13 @@ function init() {
 requestAnimationFrame(init);
 
 //! Input changes
-const inputIds = ['radius', 'speed', 'gravity', 'friction', 'bounce'];
+const inputIds = ['radius', 'speed', 'gravity', 'friction', 'bounce', 'max-ball-count'];
 const inputs = inputIds.map((id) => document.getElementById(id) as HTMLInputElement);
 
 function handleInputChange(e: Event) {
 	const target = e.target as HTMLInputElement;
 	const value = Number(target.value);
+
 	switch (target.id) {
 		case 'radius':
 			RADIUS = value;
@@ -141,6 +143,9 @@ function handleInputChange(e: Event) {
 			break;
 		case 'bounce':
 			BOUNCE = value;
+			break;
+		case 'max-ball-count':
+			MAX_BALL_COUNT = value;
 			break;
 		default:
 			break;
