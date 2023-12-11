@@ -1,0 +1,74 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.settings {
+	position: fixed;
+	top: 1%;
+	right: 1%;
+	cursor: pointer;
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.menu {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 20%;
+	height: 100%;
+	transform: translateX(150%);
+	background-color: #fafafa;
+	transition: 0.3s ease;
+    padding: 56px 12px;
+}
+
+.menu.active {
+	transform: translateX(0%);
+}
+
+.cross {
+	font-family: 'Courier New', Courier, monospace;
+	position: absolute;
+	top: 12px;
+	left: 12px;
+    cursor: pointer;
+}
+
+.input-label {
+    font-size: 12px;
+	font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 4px;
+}
+
+.input-field {
+    width: 100%;
+    border: 1px solid #000;
+    background-color: transparent;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.count-balls-wrap {
+    position: fixed;
+    left: 1%;
+    top: 1%;
+    width: 100px;
+    height: 40px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 24px;
+}
