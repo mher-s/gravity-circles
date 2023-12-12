@@ -83,12 +83,12 @@ function animateBall(ball: Ball) {
 		ball.speedY *= -ball.bounce;
 
         //? Stop Y
-		if (ball.speedY < 0 && ball.speedY > -2) {
+		if (ball.speedY < 0 && ball.speedY > -2.2) {
 			ball.speedY = 0;
 		}
 
         //? Stop X
-		if (Math.abs(ball.speedX) < 1) {
+		if (Math.abs(ball.speedX) < 1.1) {
 			ball.speedX = 0;
 		}
 
