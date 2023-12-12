@@ -1,12 +1,10 @@
 //* Random COlor
 import { getRandomColorHex } from './getRandomColorHex.js';
-
-//* Interfaces
-import { IBall } from './interfaces';
+import { Ball } from './modules/Ball/Ball.class.js';
 
 // Get canvas
 const CANVAS_ELEMENT = document.querySelector('canvas') as HTMLCanvasElement;
-const CTX = CANVAS_ELEMENT?.getContext('2d');
+const CTX = CANVAS_ELEMENT.getContext('2d');
 
 // Set canvas sizes
 CANVAS_ELEMENT!.width = window.innerWidth;
@@ -22,84 +20,17 @@ let BOUNCE: number = 0.7;
 let MAX_BALL_COUNT: number = 15;
 const balls: Ball[] = [];
 
-//! Ball instance
-class Ball implements IBall {
-	x: number;
-	y: number;
-	color!: string;
-	speedX: number;
-	speedY: number;
-	friction: number;
-	gravity: number;
-	bounce: number;
-	radius: number;
-
-	constructor(x: number, y: number, radius: number, color: string, speedX: number, speedY: number, friction: number, gravity: number, bounce: number) {
-		this.x = x;
-		this.y = y;
-		this.color = color;
-		this.speedX = speedX;
-		this.speedY = speedY;
-		this.friction = friction;
-		this.gravity = gravity;
-		this.bounce = bounce;
-		this.radius = radius;
-	}
-}
-
 //! Drawing balls in array
 function draw(): void {
 	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
 	for (let ball of balls) {
-		drawBall(ball);
-		animateBall(ball);
-	}
-}
-
-//! Drawing current ball
-function drawBall(ball: Ball) {
-	CTX?.beginPath();
-	CTX!.shadowColor = ball.color; //! Bad property but cool :D
-	CTX!.shadowBlur = 50; //! Bad property but cool :D
-	CTX!.fillStyle = ball.color;
-	CTX?.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-	CTX?.fill();
-}
-
-//! Animate current ball
-function animateBall(ball: Ball) {
-	ball.x += ball.speedX;
-	ball.y += ball.speedY;
-	ball.speedY += ball.gravity;
-
-	//? Change direction of ball in X
-	if (ball.x + ball.radius > CANVAS_ELEMENT!.width || ball.x - ball.radius < 0) {
-		ball.speedX *= -1;
-	}
-
-	//? Bounce when hit bottom the ball
-	if (ball.y + ball.radius > CANVAS_ELEMENT!.height) {
-		ball.y = CANVAS_ELEMENT!.height - ball.radius;
-		ball.speedY *= -ball.bounce;
-
-        //? Stop Y
-		if (ball.speedY < 0 && ball.speedY > -2.2) {
-			ball.speedY = 0;
-		}
-
-        //? Stop X
-		if (Math.abs(ball.speedX) < 1.1) {
-			ball.speedX = 0;
-		}
-
-		//? Stop Ball step by step
-		ball.speedX > 0 && (ball.speedX = ball.speedX - ball.friction);
-		ball.speedX < 0 && (ball.speedX = ball.speedX + ball.friction);
+		ball.draw();
+		ball.animate();
 	}
 }
 
 //! CLear Elements
-function clearCanvas():void {
+function clearCanvas(): void {
 	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
 	balls.length = 0;
 	ballCounterElement.innerHTML = String(0);
@@ -111,7 +42,7 @@ CANVAS_ELEMENT?.addEventListener('click', (e) => {
 
 	if (balls.length < MAX_BALL_COUNT) {
 		ballCounterElement.innerHTML = String(balls.length + 1);
-		balls.push(new Ball(offsetX, offsetY, RADIUS, getRandomColorHex(), SPEED_X, SPEED_Y, FRICTION, GRAVITY, BOUNCE));
+		balls.push(new Ball({ ballParams: { x: offsetX, y: offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE }, CANVAS_ELEMENT, CTX }));
 	}
 });
 
@@ -127,7 +58,7 @@ function init() {
 	draw();
 }
 
-requestAnimationFrame(init);
+init();
 
 //! Input changes
 const inputIds = ['radius', 'speed', 'gravity', 'friction', 'bounce', 'max-ball-count'];

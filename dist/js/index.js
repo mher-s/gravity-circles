@@ -1,8 +1,9 @@
 //* Random COlor
 import { getRandomColorHex } from './getRandomColorHex.js';
+import { Ball } from './modules/Ball/Ball.class.js';
 // Get canvas
 const CANVAS_ELEMENT = document.querySelector('canvas');
-const CTX = CANVAS_ELEMENT === null || CANVAS_ELEMENT === void 0 ? void 0 : CANVAS_ELEMENT.getContext('2d');
+const CTX = CANVAS_ELEMENT.getContext('2d');
 // Set canvas sizes
 CANVAS_ELEMENT.width = window.innerWidth;
 CANVAS_ELEMENT.height = window.innerHeight;
@@ -15,61 +16,12 @@ let FRICTION = 0.1;
 let BOUNCE = 0.7;
 let MAX_BALL_COUNT = 15;
 const balls = [];
-//! Ball instance
-class Ball {
-    constructor(x, y, radius, color, speedX, speedY, friction, gravity, bounce) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.speedX = speedX;
-        this.speedY = speedY;
-        this.friction = friction;
-        this.gravity = gravity;
-        this.bounce = bounce;
-        this.radius = radius;
-    }
-}
 //! Drawing balls in array
 function draw() {
     CTX === null || CTX === void 0 ? void 0 : CTX.clearRect(0, 0, CANVAS_ELEMENT.width, CANVAS_ELEMENT.height);
     for (let ball of balls) {
-        drawBall(ball);
-        animateBall(ball);
-    }
-}
-//! Drawing current ball
-function drawBall(ball) {
-    CTX === null || CTX === void 0 ? void 0 : CTX.beginPath();
-    CTX.shadowColor = ball.color; //! Bad property but cool :D
-    CTX.shadowBlur = 50; //! Bad property but cool :D
-    CTX.fillStyle = ball.color;
-    CTX === null || CTX === void 0 ? void 0 : CTX.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    CTX === null || CTX === void 0 ? void 0 : CTX.fill();
-}
-//! Animate current ball
-function animateBall(ball) {
-    ball.x += ball.speedX;
-    ball.y += ball.speedY;
-    ball.speedY += ball.gravity;
-    //? Change direction of ball in X
-    if (ball.x + ball.radius > CANVAS_ELEMENT.width || ball.x - ball.radius < 0) {
-        ball.speedX *= -1;
-    }
-    //? Bounce when hit bottom the ball
-    if (ball.y + ball.radius > CANVAS_ELEMENT.height) {
-        ball.y = CANVAS_ELEMENT.height - ball.radius;
-        ball.speedY *= -ball.bounce;
-        //? Stop Y
-        if (ball.speedY < 0 && ball.speedY > -2.2) {
-            ball.speedY = 0;
-        }
-        //? Stop X
-        if (Math.abs(ball.speedX) < 1.1) {
-            ball.speedX = 0;
-        }
-        //? Stop Ball step by step
-        ball.speedX > 0 && (ball.speedX = ball.speedX - ball.friction);
-        ball.speedX < 0 && (ball.speedX = ball.speedX + ball.friction);
+        ball.draw();
+        ball.animate();
     }
 }
 //! CLear Elements
@@ -83,7 +35,7 @@ CANVAS_ELEMENT === null || CANVAS_ELEMENT === void 0 ? void 0 : CANVAS_ELEMENT.a
     const { offsetX, offsetY } = e;
     if (balls.length < MAX_BALL_COUNT) {
         ballCounterElement.innerHTML = String(balls.length + 1);
-        balls.push(new Ball(offsetX, offsetY, RADIUS, getRandomColorHex(), SPEED_X, SPEED_Y, FRICTION, GRAVITY, BOUNCE));
+        balls.push(new Ball({ ballParams: { x: offsetX, y: offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE }, CANVAS_ELEMENT, CTX }));
     }
 });
 //! Resize listener
@@ -96,7 +48,7 @@ function init() {
     requestAnimationFrame(init);
     draw();
 }
-requestAnimationFrame(init);
+init();
 //! Input changes
 const inputIds = ['radius', 'speed', 'gravity', 'friction', 'bounce', 'max-ball-count'];
 const defaultSettingsByOrder = [20, 6, 0.5, 0.1, 0.7, 15];
