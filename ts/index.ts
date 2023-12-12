@@ -4,7 +4,7 @@ import { Ball } from './modules/Ball/Ball.class.js';
 
 // Get canvas
 const CANVAS_ELEMENT = document.querySelector('canvas') as HTMLCanvasElement;
-const CTX = CANVAS_ELEMENT.getContext('2d');
+const CTX = CANVAS_ELEMENT?.getContext('2d');
 
 // Set canvas sizes
 CANVAS_ELEMENT!.width = window.innerWidth;
@@ -24,8 +24,8 @@ const balls: Ball[] = [];
 function draw(): void {
 	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
 	for (let ball of balls) {
-		ball.draw();
-		ball.animate();
+		ball.draw(CTX);
+		ball.animate(CANVAS_ELEMENT);
 	}
 }
 
@@ -42,7 +42,7 @@ CANVAS_ELEMENT?.addEventListener('click', (e) => {
 
 	if (balls.length < MAX_BALL_COUNT) {
 		ballCounterElement.innerHTML = String(balls.length + 1);
-		balls.push(new Ball({ ballParams: { x: offsetX, y: offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE }, CANVAS_ELEMENT, CTX }));
+		balls.push(new Ball({ ballParams: { x: offsetX, y: offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE } }));
 	}
 });
 

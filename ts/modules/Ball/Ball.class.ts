@@ -1,28 +1,22 @@
 import { IBall, IBallParams } from './Ball';
 
 export class Ball {
-	CANVAS_ELEMENT: HTMLCanvasElement;
-	CTX: CanvasRenderingContext2D | null;
 	ballParams: IBallParams;
 
-	constructor({ CANVAS_ELEMENT, CTX, ballParams }: IBall) {
-		this.CANVAS_ELEMENT = CANVAS_ELEMENT;
-		this.CTX = CTX;
+	constructor({ ballParams }: IBall) {
 		this.ballParams = ballParams;
 	}
 
-	draw() {
-		this.CTX!.beginPath();
-		this.CTX!.shadowColor = this.ballParams.color;
-		this.CTX!.shadowBlur = 50;
-		this.CTX!.fillStyle = this.ballParams.color;
-		this.CTX!.arc(this.ballParams.x, this.ballParams.y, this.ballParams.radius, 0, Math.PI * 2);
-		this.CTX!.fill();
+	draw(ctx: CanvasRenderingContext2D | null) {
+		ctx!.beginPath();
+		ctx!.shadowColor = this.ballParams.color;
+		ctx!.shadowBlur = 50;
+		ctx!.fillStyle = this.ballParams.color;
+		ctx!.arc(this.ballParams.x, this.ballParams.y, this.ballParams.radius, 0, Math.PI * 2);
+		ctx!.fill();
 	}
 
-	animate() {
-		const { width, height } = this.CANVAS_ELEMENT;
-
+	animate({ width, height }: HTMLCanvasElement) {
 		this.ballParams.x += this.ballParams.speedX;
 		this.ballParams.y += this.ballParams.speedY;
 		this.ballParams.speedY += this.ballParams.gravity;

@@ -3,13 +3,13 @@ import { getRandomColorHex } from './getRandomColorHex.js';
 import { Ball } from './modules/Ball/Ball.class.js';
 // Get canvas
 const CANVAS_ELEMENT = document.querySelector('canvas');
-const CTX = CANVAS_ELEMENT.getContext('2d');
+const CTX = CANVAS_ELEMENT === null || CANVAS_ELEMENT === void 0 ? void 0 : CANVAS_ELEMENT.getContext('2d');
 // Set canvas sizes
 CANVAS_ELEMENT.width = window.innerWidth;
 CANVAS_ELEMENT.height = window.innerHeight;
 // Variables
 let RADIUS = 20;
-let SPEED_X = 6;
+let SPEED_X = 10;
 let SPEED_Y = SPEED_X / 2;
 let GRAVITY = 0.5;
 let FRICTION = 0.1;
@@ -20,8 +20,8 @@ const balls = [];
 function draw() {
     CTX === null || CTX === void 0 ? void 0 : CTX.clearRect(0, 0, CANVAS_ELEMENT.width, CANVAS_ELEMENT.height);
     for (let ball of balls) {
-        ball.draw();
-        ball.animate();
+        ball.draw(CTX);
+        ball.animate(CANVAS_ELEMENT);
     }
 }
 //! CLear Elements
@@ -35,7 +35,7 @@ CANVAS_ELEMENT === null || CANVAS_ELEMENT === void 0 ? void 0 : CANVAS_ELEMENT.a
     const { offsetX, offsetY } = e;
     if (balls.length < MAX_BALL_COUNT) {
         ballCounterElement.innerHTML = String(balls.length + 1);
-        balls.push(new Ball({ ballParams: { x: offsetX, y: offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE }, CANVAS_ELEMENT, CTX }));
+        balls.push(new Ball({ ballParams: { x: offsetX, y: offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE } }));
     }
 });
 //! Resize listener
@@ -48,7 +48,7 @@ function init() {
     requestAnimationFrame(init);
     draw();
 }
-init();
+requestAnimationFrame(init);
 //! Input changes
 const inputIds = ['radius', 'speed', 'gravity', 'friction', 'bounce', 'max-ball-count'];
 const defaultSettingsByOrder = [20, 6, 0.5, 0.1, 0.7, 15];

@@ -12,6 +12,4 @@ export interface IBallParams {
 
 export interface IBall {
 	ballParams: IBallParams;
-	CTX: CanvasRenderingContext2D | null;
-	CANVAS_ELEMENT: HTMLCanvasElement;
 }
