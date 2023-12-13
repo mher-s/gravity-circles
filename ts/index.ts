@@ -1,16 +1,7 @@
-//* Random COlor
 import { getRandomColorHex } from './getRandomColorHex.js';
 import { Ball } from './modules/Ball/Ball.class.js';
+import { Board } from './modules/Board/Board.class.js';
 
-// Get canvas
-const CANVAS_ELEMENT = document.querySelector('canvas') as HTMLCanvasElement;
-const CTX = CANVAS_ELEMENT?.getContext('2d');
-
-// Set canvas sizes
-CANVAS_ELEMENT!.width = window.innerWidth;
-CANVAS_ELEMENT!.height = window.innerHeight;
-
-// Variables
 let RADIUS: number = 20;
 let SPEED_X: number = 6;
 let SPEED_Y: number = SPEED_X / 2;
@@ -20,47 +11,29 @@ let BOUNCE: number = 0.7;
 let MAX_BALL_COUNT: number = 15;
 const balls: Ball[] = [];
 
-//! Drawing balls in array
-function draw(): void {
-	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
-	for (let ball of balls) {
-		ball.draw(CTX);
-		ball.animate(CANVAS_ELEMENT);
-	}
-}
+const CANVAS_ELEMENT = document.querySelector('canvas') as HTMLCanvasElement;
+const CTX = CANVAS_ELEMENT?.getContext('2d');
+const ballCounterElement = document.getElementById('ball-counter') as HTMLInputElement;
 
-//! CLear Elements
-function clearCanvas(): void {
-	CTX?.clearRect(0, 0, CANVAS_ELEMENT!.width, CANVAS_ELEMENT!.height);
-	balls.length = 0;
-	ballCounterElement.innerHTML = String(0);
-}
+CANVAS_ELEMENT!.width = window.innerWidth;
+CANVAS_ELEMENT!.height = window.innerHeight;
 
-//! Click listener
-CANVAS_ELEMENT?.addEventListener('click', (e) => {
-	const { offsetX, offsetY } = e;
+const board = new Board({ CANVAS_ELEMENT, CTX, ballCounterElement });
 
-	if (balls.length < MAX_BALL_COUNT) {
-		ballCounterElement.innerHTML = String(balls.length + 1);
-		balls.push(new Ball({ ballParams: { x: offsetX, y: offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE } }));
-	}
-});
+window.addEventListener('resize', () => board.resize());
+CANVAS_ELEMENT?.addEventListener('click', (e) => board.click(balls, MAX_BALL_COUNT, { x: e.offsetX, y: e.offsetY, radius: RADIUS, color: getRandomColorHex(), speedX: SPEED_X, speedY: SPEED_Y, friction: FRICTION, gravity: GRAVITY, bounce: BOUNCE }));
 
-//! Resize listener
-window.addEventListener('resize', () => {
-	CANVAS_ELEMENT!.width = innerWidth;
-	CANVAS_ELEMENT!.height = innerHeight;
-});
-
-//! Init
 function init() {
 	requestAnimationFrame(init);
-	draw();
+	board.draw(balls);
 }
 
 init();
 
-//! Input changes
+//! Settings
+const clearButton = document.getElementById('clear');
+clearButton?.addEventListener('click', () => board.clear(balls));
+
 const inputIds = ['radius', 'speed', 'gravity', 'friction', 'bounce', 'max-ball-count'];
 const defaultSettingsByOrder = [20, 6, 0.5, 0.1, 0.7, 15];
 const inputs = inputIds.map((id) => document.getElementById(id) as HTMLInputElement);
@@ -97,14 +70,6 @@ inputs.forEach((input) => {
 	input.addEventListener('input', handleInputChange);
 });
 
-//! Set ball count
-const ballCounterElement = document.getElementById('ball-counter') as HTMLInputElement;
-
-//! Clear
-const closeButton = document.getElementById('clear');
-closeButton?.addEventListener('click', clearCanvas);
-
-//! Reset setting
 const resetSettingsElement = document.getElementById('reset');
 resetSettingsElement?.addEventListener('click', resetSettings);
 
